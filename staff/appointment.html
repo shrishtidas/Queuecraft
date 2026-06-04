@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointments | Q-Flow</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { display: flex; }
+        .sidebar { width: 200px;  background: linear-gradient(180deg, #1e293b, #0f172a); padding: 20px; }
+        .main { flex: 1; padding: 20px; }
+        .appointments-layout { display: flex; gap: 20px; }
+        .card { background: #D3D3D3; padding: 20px; border: 1px solid #ccc; flex: 1; }
+        .form-row { display: flex; gap: 10px; }
+        .appointment-item { display: flex; gap: 10px; margin-bottom: 10px; }
+        .time-box { background: #007bff; color: #fff; padding: 5px 10px; border-radius: 4px; }
+        button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
+    </style>
+    <style>
+        body.dark { background:#071021; color:#e6eef8; }
+        body.dark .card, body.dark .main { background:#0b1622; color:#e6eef8; }
+        body.dark .sidebar { background:#071426; color:#cfe7ff; }
+        body.dark .sidebar .menu a { color:#cfe7ff; }
+        body.dark .topbar { background:transparent; }
+        .time-box { background: #007bff; color: #fff; padding: 5px 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">QueueCraft</div>
+        <nav class="menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="queue.html">Queue Management</a>
+            <a href="appointment.html" class="active">Appointments</a>
+            
+        </nav>
+        <div class="admin">
+            <strong>Staff</strong><br>
+            <small>User Admin</small>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <h2>Appointments</h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button id="darkToggle" class="new-btn">Dark Mode</button>
+                <button class="new-btn">Signup</button>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="appointments-layout">
+
+            <!-- LEFT: NEW APPOINTMENT -->
+            <div class="card">
+                <h3>New Appointment</h3>
+
+                <label>Customer Name</label>
+                <input type="text" id="customerName" value="John Doe">
+
+                <div class="form-row">
+                    <div>
+                        <label>Date</label>
+                        <!-- Calendar picker -->
+                        <input type="date" id="appointmentDate">
+                    </div>
+                    <div>
+                        <label>Time</label>
+                        <!-- Clock picker -->
+                        <input type="time" id="appointmentTime">
+                    </div>
+                </div>
+
+                <label>Category</label>
+                <select id="appointmentCategory">
+                    <option>Regular Check-up</option>
+                    <option>Emergency</option>
+                    <option>Women</option>
+                    <option>Handicapped</option>
+                </select>
+
+                <button class="schedule-btn" id="scheduleBtn">
+                    Schedule Appointment
+                </button>
+            </div>
+
+            <!-- RIGHT: UPCOMING APPOINTMENTS -->
+            <div class="card">
+                <h3>Upcoming Appointments</h3>
+                <div id="appointmentsList">
+                    <div class="appointment-item">
+                        <div class="time-box">02:00 PM</div>
+                        <div>
+                            <strong>Dr. Silberman</strong><br>
+                            <small>Regular Check-up • 2023-10-24</small>
+                        </div>
+                    </div>
+                    <div class="appointment-item">
+                        <div class="time-box">10:00 AM</div>
+                        <div>
+                            <strong>Sarah Connor</strong><br>
+                            <small>Emergency • 2023-10-24</small>
+                        </div>
+                    </div>
+                    <div class="appointment-item">
+                        <div class="time-box">11:30 AM</div>
+                        <div>
+                            <strong>Kyle Reese</strong><br>
+                            <small>Women • 2023-10-24</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<script>
+document.getElementById("scheduleBtn").addEventListener("click", function() {
+    const name = document.getElementById("customerName").value;
+    const date = document.getElementById("appointmentDate").value;
+    const time = document.getElementById("appointmentTime").value;
+    const category = document.getElementById("appointmentCategory").value;
+
+    if (!name || !date || !time) {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    // Format time (HH:MM → 12-hour with AM/PM)
+    let [hour, minute] = time.split(":");
+    hour = parseInt(hour);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+    const formattedTime = `${hour}:${minute} ${ampm}`;
+
+    // Create new appointment item
+    const newAppointment = document.createElement("div");
+    newAppointment.classList.add("appointment-item");
+    newAppointment.innerHTML = `
+        <div class="time-box">${formattedTime}</div>
+        <div>
+            <strong>${name}</strong><br>
+            <small>${category} • ${date}</small>
+        </div>
+    `;
+
+    // Add to list
+    document.getElementById("appointmentsList").appendChild(newAppointment);
+
+    // Clear inputs
+    document.getElementById("customerName").value = "";
+    document.getElementById("appointmentDate").value = "";
+    document.getElementById("appointmentTime").value = "";
+});
+</script>
+
+<script>
+// Dark mode toggle for appointments (default light on open)
+(function(){
+  const darkToggle = document.getElementById('darkToggle');
+  function applyMode(m){ if(m==='dark') document.body.classList.add('dark'); else document.body.classList.remove('dark'); }
+  if(darkToggle){
+    darkToggle.textContent = 'Dark Mode';
+    darkToggle.addEventListener('click', ()=>{
+      const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyMode(next);
+      localStorage.setItem('darkMode', next);
+      darkToggle.textContent = next==='dark' ? 'Light Mode' : 'Dark Mode';
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

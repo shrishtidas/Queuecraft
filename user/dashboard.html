@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Q-Flow</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body.dark { background:#071021; color:#e6eef8; }
+        body.dark .card, body.dark .main { background:#0b1622; color:#e6eef8; }
+        body.dark .sidebar { background:#071426; color:#cfe7ff; }
+        body.dark .sidebar .menu a { color:#cfe7ff; }
+        body.dark .topbar { background:transparent; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="../index.html" style="text-decoration:none;">
+            <div class="logo">QueueCraft</div>
+        </a>
+
+        <nav class="menu">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="../loginpage/login.html">Logout</a>
+        </nav>
+
+        <div class="admin" id="userInfo">
+            <strong>User</strong><br>
+            <small>Staff Admin</small>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <h2>Dashboard</h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button id="darkToggle" class="new-btn1">Dark Mode</button>
+                <button class="new-btn1"><a href="../loginpage/login.html">Sign Up</a></button>
+            </div>
+        </div>
+
+        <!-- TOP CARDS -->
+        <div class="cards">
+            <div class="card">
+                <p>Now Serving</p>
+                <h3>A-102</h3>
+                <small>Counter 3</small>
+            </div>
+
+            <div class="card">
+                <p>In Queue</p>
+                <h3>4</h3>
+                <small>People waiting</small>
+            </div>
+
+            <div class="card">
+                <p>Avg Wait Time</p>
+                <h3>14m</h3>
+                <small>-2m from yesterday</small>
+            </div>
+
+            <div class="card1">
+                <p>Delay</p>
+                <h3>4m</h3>
+                <small>Due to Emergency case</small>
+            </div>
+
+            
+        </div>
+
+        <!-- LOWER SECTION -->
+        <div class="grid-2">
+
+            <!-- WAITING QUEUE TABLE -->
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>Waiting Queue</h3>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Service Type</th>
+                            <th>Wait Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A-103</td>
+                            <td>Regular Check-up</td>
+                            <td>12m</td>
+                            <td><span class="status waiting">Waiting</span></td>
+                        </tr>
+                        <tr>
+                            <td>B-201</td>
+                            <td>Emergency</td>
+                            <td>18m</td>
+                            <td><span class="status waiting">Waiting</span></td>
+                        </tr>
+                        <tr>
+                            <td>C-305</td>
+                            <td>Regular Check-up</td>
+                            <td>5m</td>
+                            <td><span class="status waiting">Waiting</span></td>
+                        </tr>
+                        <tr>
+                            <td>A-104</td>
+                            <td>Handicapped</td>
+                            <td>2m</td>
+                            <td><span class="status waiting">Waiting</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TODAY STATS -->
+            <div class="card">
+                <h3>Today's Statistics</h3>
+
+                <div style="margin-top:15px;">
+                    <p><strong>Tokens Served</strong><br>45</p>
+                    <p style="margin-top:10px;"><strong>Avg. Service Time</strong><br>5m 30s</p>
+                    <p style="margin-top:10px;"><strong>Longest Wait</strong><br>28m</p>
+                    <p style="margin-top:10px;"><strong>No Shows</strong><br>3</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
+<script>
+// Role display and dark mode for user dashboard
+(function(){
+    const role = localStorage.getItem('role') || 'user';
+    const userInfo = document.getElementById('userInfo');
+    if(userInfo){
+        if(role==='admin') userInfo.innerHTML = '<strong>Admin User</strong><br><small>Manager</small>';
+        else if(role==='staff') userInfo.innerHTML = '<strong>Staff</strong><br><small>Staff Admin</small>';
+        else userInfo.innerHTML = '<strong>User</strong><br><small>Customer</small>';
+    }
+
+    const darkToggle = document.getElementById('darkToggle');
+    function applyMode(m){ if(m==='dark') document.body.classList.add('dark'); else document.body.classList.remove('dark'); }
+    // Default to light on page open; do not auto-apply saved mode
+    if(darkToggle){
+        darkToggle.textContent = 'Dark Mode';
+        darkToggle.addEventListener('click', ()=>{
+            const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+            applyMode(next);
+            localStorage.setItem('darkMode', next);
+            darkToggle.textContent = next==='dark' ? 'Light Mode' : 'Dark Mode';
+        });
+    }
+})();
+</script>
